@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Will You Be My Valentine? 💝</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .container {
+            text-align: center;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 500px;
+            width: 90%;
+            position: relative;
+        }
+
+        .question-container {
+            transition: opacity 0.3s ease;
+        }
+
+        .question-container.hide {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #333;
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+
+        .emoji {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .buttons-container {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 40px;
+            position: relative;
+            min-height: 60px;
+        }
+
+        button {
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        #yesBtn {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            animation: grow 2s ease-in-out infinite;
+        }
+
+        @keyframes grow {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        #yesBtn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(245, 87, 108, 0.4);
+        }
+
+        #noBtn {
+            background: #e0e0e0;
+            color: #666;
+            position: absolute;
+            transition: all 0.2s ease;
+        }
+
+        #noBtn:hover {
+            background: #d0d0d0;
+        }
+
+        .video-container {
+            display: none;
+            width: 100%;
+        }
+
+        .video-container.show {
+            display: block;
+        }
+
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            border-radius: 15px;
+            margin-top: 20px;
+            background: #000;
+        }
+
+        .video-wrapper iframe,
+        .video-wrapper video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .message {
+            margin-top: 20px;
+            font-size: 1.3rem;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .back-btn {
+            margin-top: 20px;
+            padding: 12px 30px;
+            font-size: 1rem;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .back-btn:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .shake {
+            animation: shake 0.3s ease-in-out;
+        }
+
+        @keyframes floatAround {
+            0% {
+                transform: translate(-50%, 0) scale(1);
+            }
+            25% {
+                transform: translate(calc(-50% + 40px), -20px) scale(1);
+            }
+            50% {
+                transform: translate(calc(-50% + 20px), 20px) scale(1);
+            }
+            75% {
+                transform: translate(calc(-50% - 30px), -15px) scale(1);
+            }
+            100% {
+                transform: translate(-50%, 0) scale(1);
+            }
+        }
+
+        #noBtn.floating {
+            animation: floatAround 3s ease-in-out infinite;
+        }
+
+        .geese-container {
+            position: fixed;
+            bottom: 0;
+            left: -100px;
+            width: 100%;
+            height: 80px;
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        .goose {
+            position: absolute;
+            font-size: 40px;
+            bottom: 10px;
+            animation: walkGoose 20s linear infinite;
+        }
+
+        .goose:nth-child(2) {
+            animation-delay: 4s;
+        }
+
+        .goose:nth-child(3) {
+            animation-delay: 8s;
+        }
+
+        @keyframes walkGoose {
+            0% {
+                left: -100px;
+                transform: scaleX(1);
+            }
+            48% {
+                left: calc(100% + 50px);
+                transform: scaleX(1);
+            }
+            50% {
+                left: calc(100% + 50px);
+                transform: scaleX(-1);
+            }
+            98% {
+                left: -100px;
+                transform: scaleX(-1);
+            }
+            100% {
+                left: -100px;
+                transform: scaleX(1);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="question-container" id="questionContainer">
+            <div class="emoji">💝</div>
+            <h1>ნანიცოო Will You Be My Valentine?</h1>
+            <div class="buttons-container" id="buttonsContainer">
+                <button id="yesBtn">Yes! 💕</button>
+                <button id="noBtn">No</button>
+            </div>
+        </div>
+
+        <div class="video-container" id="yesVideo">
+            <div class="message">კოცნები სტუდიაშიი</div>
+            <div class="video-wrapper">
+                <video 
+                    id="yesVideoPlayer"
+                    controls
+                    autoplay
+                    style="width: 100%; height: 100%; border-radius: 15px; object-fit: contain;">
+                    <source src="yes-video.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+            <button class="back-btn" id="backBtnYes">თავიდან 🔄</button>
+        </div>
+
+        <div class="video-container" id="noVideo">
+            <div class="message">Oh no... 💔</div>
+            <div class="video-wrapper">
+                <video 
+                    id="noVideoPlayer"
+                    controls
+                    autoplay
+                    style="width: 100%; height: 100%; border-radius: 15px; object-fit: contain;">
+                    <source src="no-video.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+            <button class="back-btn" id="backBtnNo">თავიდან 🔄</button>
+        </div>
+    </div>
+
+    <div class="geese-container">
+        <div class="goose">🦆</div>
+        <div class="goose">🦆</div>
+        <div class="goose">🦆</div>
+    </div>
+
+    <audio id="noSound" preload="auto">
+        <source src="sound.mp4" type="audio/mp4">
+    </audio>
+
+    <script>
+        const yesBtn = document.getElementById('yesBtn');
+        const noBtn = document.getElementById('noBtn');
+        const questionContainer = document.getElementById('questionContainer');
+        const yesVideo = document.getElementById('yesVideo');
+        const noVideo = document.getElementById('noVideo');
+        const buttonsContainer = document.getElementById('buttonsContainer');
+        const backBtnYes = document.getElementById('backBtnYes');
+        const backBtnNo = document.getElementById('backBtnNo');
+        const yesVideoPlayer = document.getElementById('yesVideoPlayer');
+        const noVideoPlayer = document.getElementById('noVideoPlayer');
+        const noSound = document.getElementById('noSound');
+
+        let noBtnSize = 1;
+        let noAttempts = 0;
+        let noClickCount = 0;
+        const clicksRequired = 3; // Number of clicks needed to actually select No
+
+        // Position no button initially and start floating
+        noBtn.style.left = '60%';
+        noBtn.style.transform = 'translateX(-50%)';
+        noBtn.classList.add('floating');
+
+        // Make "No" button run away and play sound
+        noBtn.addEventListener('mouseenter', () => {
+            noAttempts++;
+            
+            // Play sound from beginning on each hover
+            noSound.currentTime = 0;
+            noSound.play().catch(e => console.log('Audio play failed:', e));
+            
+            // Shake the container
+            buttonsContainer.classList.add('shake');
+            setTimeout(() => buttonsContainer.classList.remove('shake'), 300);
+            
+            // Smaller random movement (easier to catch)
+            const maxX = 150;
+            const maxY = 60;
+            const randomX = Math.random() * maxX - maxX/2;
+            const randomY = Math.random() * maxY - maxY/2;
+            
+            // Temporarily remove floating animation
+            noBtn.classList.remove('floating');
+            
+            noBtn.style.left = `calc(60% + ${randomX}px)`;
+            noBtn.style.top = `${randomY}px`;
+            
+            // Shrink less (easier to click)
+            noBtnSize = Math.max(0.7, noBtnSize - 0.05);
+            noBtn.style.transform = `translateX(-50%) scale(${noBtnSize})`;
+            
+            // Resume floating after a delay
+            setTimeout(() => {
+                noBtn.classList.add('floating');
+            }, 500);
+            
+            // Make Yes button grow
+            yesBtn.style.transform = 'scale(1.2)';
+            setTimeout(() => yesBtn.style.transform = 'scale(1)', 200);
+        });
+
+        // Handle Yes click
+        yesBtn.addEventListener('click', () => {
+            // Stop the sound immediately
+            noSound.pause();
+            noSound.currentTime = 0;
+            
+            questionContainer.classList.add('hide');
+            setTimeout(() => {
+                questionContainer.style.display = 'none';
+                yesVideo.classList.add('show');
+                yesVideoPlayer.play();
+            }, 300);
+        });
+
+        // Handle No click (requires multiple clicks)
+        noBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            noClickCount++;
+            
+            if (noClickCount < clicksRequired) {
+                // Not enough clicks yet - play sound and jump away
+                noSound.currentTime = 0;
+                noSound.play().catch(err => console.log('Audio play failed:', err));
+                
+                // Make it jump to a random position
+                const maxX = 200;
+                const maxY = 80;
+                const randomX = Math.random() * maxX - maxX/2;
+                const randomY = Math.random() * maxY - maxY/2;
+                
+                noBtn.classList.remove('floating');
+                noBtn.style.left = `calc(60% + ${randomX}px)`;
+                noBtn.style.top = `${randomY}px`;
+                
+                setTimeout(() => {
+                    noBtn.classList.add('floating');
+                }, 500);
+                
+                // Shake container
+                buttonsContainer.classList.add('shake');
+                setTimeout(() => buttonsContainer.classList.remove('shake'), 300);
+            } else {
+                // Enough clicks - actually go to No video
+                questionContainer.classList.add('hide');
+                setTimeout(() => {
+                    questionContainer.style.display = 'none';
+                    noVideo.classList.add('show');
+                    noVideoPlayer.play();
+                }, 300);
+            }
+        });
+
+        // Back button functionality
+        backBtnYes.addEventListener('click', resetPage);
+        backBtnNo.addEventListener('click', resetPage);
+
+        function resetPage() {
+            // Stop videos
+            yesVideoPlayer.pause();
+            yesVideoPlayer.currentTime = 0;
+            noVideoPlayer.pause();
+            noVideoPlayer.currentTime = 0;
+            
+            // Hide video containers
+            yesVideo.classList.remove('show');
+            noVideo.classList.remove('show');
+            
+            // Reset and show question
+            questionContainer.style.display = 'block';
+            setTimeout(() => {
+                questionContainer.classList.remove('hide');
+            }, 50);
+            
+            // Reset no button
+            noBtnSize = 1;
+            noAttempts = 0;
+            noClickCount = 0;
+            noBtn.style.left = '60%';
+            noBtn.style.top = '0';
+            noBtn.style.transform = 'translateX(-50%) scale(1)';
+            noBtn.classList.add('floating');
+        }
+    </script>
+</body>
+</html>
